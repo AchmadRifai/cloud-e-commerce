@@ -1,0 +1,40 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    loadbalancer:
+      configurations: health-check
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      httpserver:
+        wiretap: true
+      httpclient:
+        wiretap: true
+      routes:
+      - id: product-service
+        predicates:
+        - Path=/product/**
+        uri: lb://product-service
+      - id: product-service
+        predicates:
+        - Path=/product/**
+        uri: lb://product-service
+      - id: order-service
+        predicates:
+        - Path=/order/**
+        uri: lb://order-service
+      - id: user-service
+        predicates:
+        - Path=/user/**
+        uri: lb://user-service
